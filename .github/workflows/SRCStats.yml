@@ -38,7 +38,7 @@ jobs:
       uses: Azure/sql-action@v1.3
       with:
         server-name: tcp:srcstats.database.windows.net
-        connection-string: ${{ secrets.CONNECTION_STRING }}
+        connection-string: ${{ secrets.SQL_String }}
         sql-file: ${{ env.WORKING_DIRECTORY }}/sql/script.sql
     - name: Deploy to Azure WebApp
       uses: azure/webapps-deploy@v2
