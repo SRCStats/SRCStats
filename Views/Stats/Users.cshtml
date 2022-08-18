@@ -1,0 +1,213 @@
+﻿@using System.Globalization
+@using System.Diagnostics
+@using Microsoft.AspNetCore.Components
+
+@using SRCStats.Models.SRC
+@model SRCStats.Models.User
+
+
+@{
+    ViewData["Title"] = "User Stats";
+    TextInfo ti = new CultureInfo("en-US", false).TextInfo;
+}
+
+@if (Model == null)
+{
+    @* I wanted whatever is going to be displayed when no user is provided to be the complete center of the screen, minus the footer *@
+    <div class="d-flex justify-content-center align-items-center vh-100" style="margin-bottom: -130px">
+        <input id="userName" class="form-floating"/>
+        <button style="min-width: 100px; min-height: 30px" type="button" id="submit" value="Fetch"/>
+    </div>
+    <div class="text-center">
+        <p id="prog-info" class="m-3 text-info text-center"></p>
+        @* i dont like html i dunno how to get this to be inline with prog info without being inside of the element, because it gets overwritten on receiveprogress *@
+        @* we also need a better way of this tooltip being visible (like balloon or something) *@
+        <span id="thread-spinner" hidden title="We are currently waiting for an open thread to connect to the API! Please don't reload the page, we'll get connected soon!" class="mx-1 spinner-grow spinner-grow-sm text-info" role="status"></span>
+    </div>
+    <div id="prog" class="progress">
+            <div id="prog-bar1" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-danger" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            <div id="prog-bar2" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-warning" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            <div id="prog-bar3" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            <div id="prog-bar4" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-primary" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            <div id="prog-bar5" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            <div id="prog-bar6" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-secondary" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            <div id="prog-bar7" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-dark" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/user.js"></script>
+}
+@if (Model != null)
+{
+    @* When a user is provided, all of the stats should (when possible) fit onto one screen so there's no need to scroll to see everything, with the archetypes below. *@
+    <div class="m-3 text-center">
+        <a href="~/user" class="btn btn-primary">
+            <i class="bi bi-skip-backward-fill"></i> Return
+        </a>
+    </div>
+    @if (Model.Image != null)
+    {
+        <img src="@Model.Image" draggable="false" class="rounded d-block mx-auto">
+    }
+    <br />
+    <div class="d-flex justify-content-center">
+        <h3>
+            <span>
+                @* todo: use balloon or similar for popups on these to display the alt text *@
+                @if (Model.Icon != null)
+                {
+                    <img draggable="false" style="max-height: 38px; min-height: 28px;" src="@Model.Icon" alt="@(Model.Role != "user" ? ti.ToTitleCase(Model.Role) : null)">
+                }
+                @if (Model.SupporterIcon != null)
+                {
+                    <img draggable="false" style="max-height: 38px; min-height: 28px;" src="@Model.SupporterIcon" alt="Speedrun.com Supporter">
+                }
+            </span>
+            @* this looks like ass *@
+            @* todo: make this look like src's name gradient? (per letter instead of clip) *@
+            <span style="@(Model.NameStyle.Style == "gradient" ? $"background-image: linear-gradient(60deg, {Model.NameStyle.ColorFrom.Light}, {Model.NameStyle.ColorTo.Light}); background-clip: text; color: transparent;" : $"color: {Model.NameStyle.Color.Light}")">@Model.Name </span>
+            @if (Model.Pronouns != null && Model.Pronouns.Length > 0)
+            {
+                <span class="text-secondary">(@Model.Pronouns)</span>
+            }
+        </h3>
+    </div>
+    @* this also looks like ass aaaaaaaaaaaaaaaaa *@
+    @if (Model.Location != null && Model.Location.Country != null && Model.Location.Country.Names != null)
+    {
+        <h4 class="text-center" style="white-space: pre-line;">@((Model.Location.Country.Code != "vh" ? string.Concat(Model.Location.Country.Code.Substring(0, 2).ToUpper().Select(x => char.ConvertFromUtf32(x + 0x1F1A5))) : "") + " " + Model.Location.Country.Names.International)</h4>
+    }
+    <div class="container text-center">
+        <div class="row">
+            <div class="col">
+                <h2>Runs</h2>
+                <h3>@(Model.FullGameRuns+Model.IndividualLevelRuns)</h3>
+                <p class="text-secondary">Full game: @Model.FullGameRuns</p>
+                <p class="text-secondary">Individual level: @Model.IndividualLevelRuns</p>
+            </div>
+            <div class="col">
+                <h2>Runs Reviewed</h2>
+                <h3>@(Model.VerifiedRuns+Model.RejectedRuns)</h3>
+                <p class="text-secondary">Verified runs: @Model.VerifiedRuns</p>
+                <p class="text-secondary">Rejected runs: @Model.RejectedRuns</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h2>Forum Posts</h2>
+                <h3>@Model.ForumPosts</h3>
+            </div>
+            <div class="col">
+                <h2>Total Run Time</h2>
+                <h3>@(TimeSpan.FromSeconds(Model.TotalRunTime).ToString("d'd 'h'h 'm'm 's's'"))</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h2>Date Joined</h2>
+                <h3>@(Model.SignUpDate.ToString())</h3>
+            </div>
+        </div>
+        <div class="row">
+            <form method="post" asp-action="ForceUsers">
+                <input asp-for="Name" value="@Model.Name" hidden>
+                <button type="submit" disabled="@(!(Model.LastUpdated.AddMinutes(10) < DateTime.UtcNow) && !Debugger.IsAttached)" class="btn btn-warning"  style="max-height: 38px; min-height: 28px;"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-5 mb-5 container text-center">
+        @{
+            var archetypes = Model.Archetypes.ToArray();
+                @for (int i = 0; i < Model.Archetypes.Count(); i++)
+            {
+                int j = i + 1;
+                if (j % 3 == 1)
+                {
+                        @:<div class=row>
+                }
+                    <div class="col">
+                        <h3>@(archetypes[i].ArchetypeMeta.Name)<sup><i title="@archetypes[i].ArchetypeMeta.Description" class="bi bi-question-circle fs-6 text-primary"></i></sup></h3>
+                        <h2>@(archetypes[i].Value + "%")</h2>
+                        <h4>@(archetypes[i].OptionalParam != null ? string.Format(archetypes[i].ArchetypeMeta.MaxDesc, archetypes[i].OptionalParam) : archetypes[i].ArchetypeMeta.MaxDesc)</h4>
+                        <input type="range" value="@archetypes[i].Value">
+                    </div>
+                if (j % 3 == 0)
+                {
+                        @:</div>
+                }
+            }
+        }
+    </div>
+
+    <div class="mt-5 mb-5 container text-center">
+        @{
+            var archetypesDual = Model.DualArchetypes.ToArray();
+                @for (int i = 0; i < Model.DualArchetypes.Count(); i++)
+            {
+                int j = i + 1;
+                if (j % 3 == 1)
+                {
+                        @:<div class="row">
+                }
+                    @:<div class="col">
+                if (archetypesDual[i].Value > 25)
+                {
+                        <h3>@archetypesDual[i].ArchetypeMeta.MaxName<sup><i title="@archetypesDual[i].ArchetypeMeta.Description" class="bi bi-question-circle fs-6 text-primary"></i></sup></h3>
+                        <h3>@(archetypesDual[i].Value + "%")</h3>
+                        <h4>@(archetypesDual[i].OptionalParam != null ? string.Format(archetypesDual[i].ArchetypeMeta.MaxDesc, archetypesDual[i].OptionalParam) : archetypesDual[i].ArchetypeMeta.MaxDesc)</h4>
+                }
+                else if (archetypesDual[i].Value < -25)
+                {
+                        <h3>@archetypesDual[i].ArchetypeMeta.MinName<sup><i title="@archetypesDual[i].ArchetypeMeta.Description" class="bi bi-question-circle fs-6 text-primary"></i></sup></h3>
+                        <h3>@(Math.Abs((int)archetypesDual[i].Value) + "%")</h3>
+                        <h4>@(archetypesDual[i].OptionalParam != null ? string.Format(archetypesDual[i].ArchetypeMeta.MinDesc, archetypesDual[i].OptionalParam) : archetypesDual[i].ArchetypeMeta.MinDesc)</h4>
+                }
+                else
+                {
+                        <h3>@(archetypesDual[i].ArchetypeMeta.Name)<sup><i title="@archetypesDual[i].ArchetypeMeta.Description" class="bi bi-question-circle fs-6 text-primary"></i></sup></h3>
+                        <h2>@(Math.Abs((int)archetypesDual[i].Value) + "%")</h2>
+                }
+                    <input type="range" min="-100" max="100" value="@archetypesDual[i].Value">
+                    @:</div>
+                if (j % 3 == 0)
+                {
+                        @:</div>
+                }
+            }
+        }
+    </div>
+
+    @* the question mark circle tooltips are temporary, you can include the description in another way with the redesign*@
+    <div class="container-fluid w-100">
+        @{
+            var trophies = Model.Trophies.Where(x => x.TrophyMeta.IsSecret == false).OrderBy(x => x.TrophyMeta.Order).ToArray();
+                <div class="d-flex m-5 bg-light flex-row">
+                    @foreach (var trophy in trophies)
+                {
+                        <div class="text-center p-3">
+                            <h2>@trophy.TrophyMeta.Name</h2>
+                            <h3>@trophy.TrophyMeta.Description</h3>
+                            <img style="max-width: 128px" src=@(trophy.IsAchieved ? "/assets/trophy-unlocked.png" : "/assets/trophy-locked.png") alt=@(trophy.IsAchieved ? "Achieved" : "Unachieved")>
+                            <h4><i>@trophy.TrophyMeta.Quote</i></h4>
+                        </div>
+                }
+                </div>
+        }
+    </div>
+
+    <div class="container-fluid w-100">
+        @{
+            var secrets = Model.Trophies.Where(x => x.TrophyMeta.IsSecret == true).OrderBy(x => x.TrophyMeta.Order).ToArray();
+                <div class="d-flex m-5 bg-light flex-row row">
+                    @foreach (var trophy in secrets)
+                {
+                        <div class="text-center p-3" style="max-width: 512px">
+                            <h2>@(trophy.IsAchieved ? trophy.TrophyMeta.Name : "???")<sup><i title="@(trophy.IsAchieved ? trophy.TrophyMeta.Description : "This is a secret trophy! You won't know the details for these trophies until you unlock them.")" class="bi bi-question-circle fs-6 text-primary"></i></sup></h2>
+                            <img style="max-width: 128px" src=@(trophy.IsAchieved ? "/assets/trophy-unlocked.png" : "/assets/trophy-locked.png") alt=@(trophy.IsAchieved ? "Achieved" : "Unachieved")>
+                            <h4><i>@(trophy.IsAchieved ? trophy.TrophyMeta.Quote : "???")</i></h4>
+                        </div>
+                }
+                </div>
+        }
+    </div>
+}

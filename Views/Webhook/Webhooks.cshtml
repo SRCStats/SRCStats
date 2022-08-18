@@ -1,0 +1,80 @@
+﻿@model SRCStats.Models.Webhook
+
+@{
+	ViewData["Title"] = "User Stats";
+}
+
+<form id="webhook-form" method="post" asp-action="create">
+	<div class="mt-4 container">
+		<div class="input-group m-3">
+			<span class="input-group-text" id="webhook-desc">Webhook URL</span>
+			<input id="webhook-val" type="text" asp-for="WebhookUrl" class="form-control" placeholder="https://discord.com/api/webhooks/xxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxx" aria-label="Webhook URL" aria-describedby="webhook-desc">
+			<button type="button" class="btn btn-success" id="submit-webhook">Submit</button>
+		</div>
+		<h2 class="m-3">Records<sup><i data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Events for when a run is verified." class="bi bi-question-circle fs-6 text-primary"></i></sup></h2>
+		<div class="m-3 form-check form-switch">
+			<input class="form-check-input" type="checkbox" autocomplete=off id="enable-records" checked>
+			<label class="form-check-label" for="enable-records">Enabled</label>
+		</div>
+		<div class="input-group grid" id="records-ig">
+			<div class="row w-100">
+				<div class="col-3">
+					<span class="input-group-text" id="game-desc">Game</span>
+					<input type="text" id="rgames-input" class="form-control" placeholder="Leave empty for any game..." aria-label="Game" aria-describedby="game-desc">
+					<div class="border list-group" style="height: 250px; overflow-y: auto" id="rgames-list"></div>
+				</div>
+				<div class="col-3">
+					<label class="input-group-text mx-1" for="category">Category</label>
+					<input id="rcategories-val" asp-for="RCategories" hidden />
+					<select id="category-picker" class="selectpicker w-100" multiple title="Select categories..."></select>
+					<input id="selectAllCats" class="btn mt-1 mx-auto btn-primary" type="button" value="Select all categories">
+				</div>
+				<div class="col-3">
+					<span class="input-group-text" id="user-desc">User</span>
+					<input id="rusers-val" asp-for="RUsers" hidden />
+					<input type="text" id="rusers-input" class="form-control" placeholder="Leave empty for any user..." aria-label="User" aria-describedby="user-desc">
+					<div class="border list-group" style="height: 250px; overflow-y: auto" id="rusers-list"></div>
+				</div>
+				<div class="col-3">
+					<label class="input-group-text mx-1" for="events">Events</label>
+					<input id="revents-val" asp-for="REvents" hidden />
+					<select id="events-picker" class="selectpicker w-100" title="Select events...">
+						<option value="wr">World records only</option>
+						<option value="pb">World records and personal bests</option>
+						<option value="all">All submitted runs</option>
+					</select>
+				</div>
+			</div>
+				
+			</div>
+		<h2 class="m-3">Verification<sup><i data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Events for when a run's verification status changes." class="bi bi-question-circle fs-6 text-primary"></i></sup></h2>
+		<div class="m-3 form-check form-switch">
+			<input class="form-check-input" type="checkbox" autocomplete=off id="enable-verification" checked>
+			<label class="form-check-label" for="enable-verification">Enabled</label>
+		</div>
+		<div class="input-group" id="verification-ig">
+			<div class="m-3">
+				<label class="input-group-text mx-1" for="context">Context<sup><i data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Game: Specific games. User: All games moderated by that user." class="bi bi-question-circle fs-7 text-primary"></i></sup></label>
+				<select class="selectpicker" title="Select context...">
+					<option value="game">Game</option>
+					<option value="user">User</option>
+				</select>
+			</div>
+			<div class="m-3">
+				<span class="input-group-text" id="name-desc">Name</span>
+				<input type="text" class="form-control" placeholder="Enter game or user name..." aria-label="Name" aria-describedby="name-desc">
+			</div>
+			<div class="m-3">
+				<label class="input-group-text mx-1">Events</label>
+				<select class="selectpicker" multiple title="Select events...">
+					<option value="new">When a run is submitted</option>
+					<option value="rejected">When a run is rejected</option>
+					<option value="verified">When a run is verified</option>
+				</select>
+			</div>
+		</div>
+	</div>
+</form>
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/webhooks.js"></script>
