@@ -1,5 +1,8 @@
-﻿namespace SRCStats.Models
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace SRCStats.Models
 {
+    [BsonIgnoreExtraElements]
     public class WebhookDb
     {
         public Uri WebhookUrl { get; set; }
