@@ -2,7 +2,7 @@ name: Build and deploy .NET Core application to Web App SRCStats
 on:
   push:
     branches:
-    - "'main'"
+    - main
 env:
   AZURE_WEBAPP_NAME: SRCStats
   AZURE_WEBAPP_PACKAGE_PATH: ./published
@@ -15,6 +15,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Add mask
+      run: |
+          echo "::add-mask::${{ secrets.Private_URL }}"
+          echo "::add-mask::${{ secrets.Private_SCM_URL }}"
     - uses: actions/checkout@v2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
@@ -38,7 +42,7 @@ jobs:
       uses: Azure/sql-action@v1.3
       with:
         server-name: tcp:srcstats.database.windows.net
-        connection-string: ${{ secrets.CONNECTION_STRING }}
+        connection-string: ${{ secrets.SQL_String }}
         sql-file: ${{ env.WORKING_DIRECTORY }}/sql/script.sql
     - name: Deploy to Azure WebApp
       uses: azure/webapps-deploy@v2
