@@ -52,9 +52,14 @@ namespace SRCStats
             app.MapHub<WebhookHub>("/webhookHub");
 
             var db = app.Services.CreateScope().ServiceProvider.GetRequiredService<StatsDbContext>();
+
+            if (db.Database.GetPendingMigrations().Any())
+                db.Database.Migrate();
+
             Archetypes.InitializeArchetypes(db);
             Trophies.InitializeTrophies(db);
             db.Database.ExecuteSqlRawAsync("TRUNCATE TABLE InProgress");
+
             app.Run();
 
         }
