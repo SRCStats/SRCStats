@@ -19,7 +19,7 @@ Additional warning: This code isn't very good. There's a lot of unimplemented fe
 
 # Setup
 
-Clone the repository and ensure you have Visual Studio Community 2022 and its `ASP.NET and web development` component installed; earlier versions of VSCommunity don't support targetting .NET Core 6. Create a new file called `appsettings.json` and paste the following into the file:
+Clone the repository and ensure you have Visual Studio Community 2022 and its `ASP.NET and web development` component installed; earlier versions of VSCommunity don't support targetting .NET Core 6.
 
 Configure a new SQL instance, or use an existing one. (Developing locally is recommended to be with Microsoft SQL Server). Additionally, configure a new MongoDB instance, or use an existing one. ([Azure Cosmos DB](https://azure.microsoft.com/en-us/services/cosmos-db/) w/ MongoDB API is used in production, but any will do.)
 Run the following commands to set the environment variables:
