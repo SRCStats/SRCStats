@@ -58,8 +58,8 @@ button.accept-policy {
         width: 400px;
     }
 
-nav.site-nav-desktop {
-    gap: 1rem;
+.site-nav-desktop {
+    gap: 2rem;
 }
 
 nav a {
@@ -100,6 +100,10 @@ nav a {
 
 .site-nav-desktop .last-nav {
     margin-right: 1rem;
+}
+
+.site-logo {
+    max-width: 240px;
 }
 
 .site-logo img {

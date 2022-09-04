@@ -5,7 +5,7 @@ WORKDIR /home/srcstats/site
 COPY *.csproj .
 RUN dotnet restore
 
-RUN dotnet tool install -g dotnet-ef --version 6.0.7
+RUN dotnet tool install -g dotnet-ef --version 6.0.8
 ENV PATH $PATH:/root/.dotnet/tools
 
 COPY . .
@@ -16,7 +16,7 @@ RUN dotnet ef migrations add Init
 
 RUN dotnet publish -c Release -o /SRCStats
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0.7
+FROM mcr.microsoft.com/dotnet/aspnet:6.0.8
 WORKDIR /home/srcstats/site
 COPY --from=build /SRCStats .
 ENTRYPOINT ["dotnet", "SRCStats.dll"]

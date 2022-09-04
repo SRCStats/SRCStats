@@ -18,13 +18,13 @@
 
 </head>
 <body>
-    <header class="site-header">
+    <header class="sticky-top site-header">
         <div class="header-main d-flex justify-content-between">
-            <a class="site-logo" href="/"><img src="/assets/header-logo.png" alt="SRCStats logo"></a>
+            <a class="site-logo" href="/" aria-label="Return home"><img src="/assets/header-logo.png" alt="SRCStats logo"></a>
             <nav class="site-nav-desktop navbar">
                 <a class="d-md-flex d-none" href="/user">Users</a>
                 <a class="d-md-flex d-none" href="/runs">Runs</a>
-                <a class="last-nav d-md-flex d-none" href="#">Tools</a>
+                <a class="last-nav d-md-flex d-none" href="/webhooks">Tools</a>
                 <button class="navbar-toggler btn-menuburger" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -34,21 +34,22 @@
             <div class="collapse-wrapper">
                 <div class="bg-dark p-4">
                     <nav class="site-nav-mobile d-flex flex-column">
-                        <a href="#">Users</a>
-                        <a href="#">Runs</a>
-                        <a href="#">Tools</a>
+                        <a href="/user">Users</a>
+                        <a href="/runs">Runs</a>
+                        <a href="/webhooks">Tools</a>
                     </nav>
                 </div>
             </div>
         </div>
     </header>
+
     <main role="main">
         @RenderBody()
     </main>
 
     <footer class="border-top footer text-muted">
         <div class="container text-center">
-            Made by <a href="https://spoicy.ch/">Spoicy</a> and <a href="https://suprnova.dev/">Suprnova</a> &#10084;
+            <span>Made by <a href="https://spoicy.ch/">Spoicy</a> and <a href="https://suprnova.dev/">Suprnova</a> &#10084;</span>
         </div>
     </footer>
     @await RenderSectionAsync("Scripts", required: false)
