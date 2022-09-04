@@ -1,0 +1,46 @@
+﻿.container {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.button-controls {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+    .button-controls a {
+        margin-right: 0.5rem;
+    }
+
+.user-profile {
+    padding-bottom: 5rem;
+}
+
+.user-profile-picture img {
+    max-height: 300px;
+}
+
+.user-info {
+    top: 4px;
+    position: relative;
+}
+
+.username {
+    background-clip: text;
+    -moz-background-clip: text;
+    -webkit-background-clip: text;
+    font-weight: 600;
+}
+
+.icons img {
+    max-height: 38px;
+}
+
+.user-archetypes,
+.user-trophies {
+    border: 2px solid #FFCE34;
+    padding: 0.5rem;
+}
+
+.emoji {
+    width: 1.75rem;
+}

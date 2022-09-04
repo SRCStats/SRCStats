@@ -7,10 +7,6 @@ a.navbar-brand {
   word-break: break-all;
 }
 
-a {
-  color: #0077cc;
-}
-
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
@@ -45,4 +41,110 @@ button.accept-policy {
   width: 100%;
   white-space: nowrap;
   line-height: 60px;
+}
+
+.header-main {
+    background-color: #0d1012;
+    height: 100px;
+    padding: 1rem;
+}
+
+.collapse-wrapper {
+    display: flex;
+    justify-content: end;
+}
+
+    .collapse-wrapper > div {
+        width: 400px;
+    }
+
+nav.site-nav-desktop {
+    gap: 1rem;
+}
+
+nav a {
+    color: #FFF;
+    font-size: 2rem;
+    text-decoration: none;
+    transition: color .15s ease;
+}
+
+    nav a:hover,
+    nav a:focus {
+        color: #F9D040;
+    }
+
+.site-nav-desktop .btn-menuburger {
+    background-color: #666666;
+    font-size: 1.75rem;
+    height: 100%;
+    padding: 0.25rem;
+    border: none;
+}
+
+    .site-nav-desktop .btn-menuburger:hover,
+    .site-nav-desktop .btn-menuburger:focus {
+        background-color: #525252;
+        color: #F9D040;
+        border: none;
+    }
+
+    .site-nav-desktop .btn-menuburger i {
+        position: relative;
+        top: -12px;
+    }
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0, 0, 0, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E")
+}
+
+.site-nav-desktop .last-nav {
+    margin-right: 1rem;
+}
+
+.site-logo img {
+    height: 100%;
+}
+
+/* Up to md Breakpoint */
+@media screen and (max-width: 991.98px) {
+    
+}
+
+/* Up to sm Breakpoint */
+@media screen and (max-width: 767.98px) {
+    
+
+    .site-nav-desktop .btn-menuburger {
+        font-size: 32px;
+    }
+
+    .collapse-wrapper > div {
+        width: 100%;
+    }
+}
+
+/* Up to xs Breakpoint */
+@media screen and (max-width: 567.98px) {
+    .header-main {
+        height: 85px;
+    }
+
+    .site-nav-desktop.navbar {
+        padding: 0;
+    }
+
+    .site-nav-desktop .btn-menuburger {
+        height: 85%;
+        font-size: 28px;
+    }
+
+    .site-banner {
+        padding: 2rem 1rem;
+    }
+}
+
+/* Very small resolutions */
+@media screen and (max-width: 349.98px) {
+
 }
