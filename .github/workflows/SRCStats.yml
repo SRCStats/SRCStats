@@ -1,8 +1,9 @@
 name: Build and deploy SRCStats to Azure
+
 on:
-  push:
-    branches:
-    - main
+  release:
+    types: [published]
+
 env:
   AZURE_WEBAPP_NAME: SRCStats
   AZURE_WEBAPP_PACKAGE_PATH: ./published
@@ -11,6 +12,7 @@ env:
   SRC_STATS_MONGODB_CONNECTION_STRING: ${{ secrets.MongoDB_String }}
   DOTNET_CORE_VERSION: 6.0.x
   WORKING_DIRECTORY: .
+
 jobs:
   build:
     runs-on: ubuntu-latest
