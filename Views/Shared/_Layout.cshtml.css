@@ -129,7 +129,7 @@ nav a {
 }
 
 /* Up to xs Breakpoint */
-@media screen and (max-width: 567.98px) {
+@media screen and (max-width: 575.98px) {
     .header-main {
         height: 85px;
     }
