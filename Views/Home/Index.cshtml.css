@@ -71,7 +71,7 @@
 }
 
 /* Up to xs Breakpoint */
-@media screen and (max-width: 567.98px) {
+@media screen and (max-width: 575.98px) {
     .mobile-top {
         margin-bottom: 0.5rem;
     }

@@ -47,7 +47,9 @@ h1 {
     transform: translateY(-50%);
 }
 
-
+.emoji {
+    width: 1.75rem;
+}
 
 /* Up to md Breakpoint */
 @media screen and (max-width: 991.98px) {
