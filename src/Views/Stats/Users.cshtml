@@ -13,6 +13,12 @@
 
 @if (Model == null)
 {
+    @section Scripts
+    {
+        <script src="~/js/user_search.js" defer></script>
+        <link href="~/css/user_search.css" rel="stylesheet" />
+    }
+
     <div class="container-fluid p-3">
         @* I wanted whatever is going to be displayed when no user is provided to be the complete center of the screen, minus the footer *@
         <div class="user-fetch-fields d-flex justify-content-center align-items-center" style="margin-bottom: -130px">
@@ -35,11 +41,15 @@
             <div id="prog-bar7" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-dark" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
     </div>
-    <script src="~/js/signalr/dist/browser/signalr.js"></script>
-    <script src="~/js/user.js"></script>
 }
 @if (Model != null)
 {
+    @section Scripts
+    {
+        <script src="~/js/user_page.js" defer></script>
+        <link href="~/css/user_page.css" rel="stylesheet" />
+    }
+
     <div class="container pb-3">
         <div class="row button-controls">
             <div class="col-12 d-flex gap-2 align-items-center justify-content-center">

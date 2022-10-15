@@ -1,0 +1,36 @@
+{
+  "name": "srcstats",
+  "version": "0.2.0",
+  "description": "SRCStats visualizes statistics from Speedrun.com, along with providing tools to improve your speedrunning experience.",
+  "scripts": {
+    "dev": "webpack --watch",
+    "build": "cross-env NODE_ENV=production webpack"
+  },
+  "author": "SRCStats",
+  "license": "MIT",
+  "dependencies": {
+    "@microsoft/signalr": "^6.0.10",
+    "@popperjs/core": "^2.11.6",
+    "bootstrap": "^5.2.2",
+    "bootstrap-icons": "^1.9.1",
+    "bootstrap-select": "^1.13.18",
+    "jquery": "^3.6.1",
+    "jquery-validation": "^1.19.5",
+    "jquery-validation-unobtrusive": "^4.0.0",
+    "twemoji": "^14.0.2"
+  },
+  "devDependencies": {
+    "css-loader": "^6.7.1",
+    "css-minimizer-webpack-plugin": "^4.2.2",
+    "cssnano": "^5.1.13",
+    "mini-css-extract-plugin": "^2.6.1",
+    "node-sass": "^7.0.3",
+    "postcss-loader": "^7.0.1",
+    "postcss-preset-env": "^7.8.2",
+    "sass-loader": "^13.1.0",
+    "style-loader": "^3.3.1",
+    "terser-webpack-plugin": "^5.3.6",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  }
+}

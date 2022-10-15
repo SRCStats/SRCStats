@@ -4,6 +4,12 @@
 	ViewData["Title"] = "User Stats";
 }
 
+@section Scripts
+{
+    <script src="~/js/webhooks.js" defer></script>
+	<link href="~/css/webhooks.css" rel="stylesheet" />
+}
+
 <form id="webhook-form" method="post" asp-action="create">
 	<div class="mt-4 container">
 		<div class="input-group m-3">
@@ -75,6 +81,3 @@
 		</div>
 	</div>
 </form>
-
-<script src="~/js/signalr/dist/browser/signalr.js"></script>
-<script src="~/js/webhooks.js"></script>

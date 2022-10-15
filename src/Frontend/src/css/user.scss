@@ -1,0 +1,101 @@
+.container {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.user-fetch-fields {
+    height: calc(100vh - 160px);
+}
+
+.button-controls {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+.user-profile {
+    padding-bottom: 5rem;
+}
+
+.user-profile-picture img {
+    max-height: 300px;
+    max-width: calc(100vw - 3rem);
+}
+
+.user-info {
+    top: 4px;
+    position: relative;
+}
+
+.username {
+    background-clip: text;
+    -moz-background-clip: text;
+    -webkit-background-clip: text;
+    font-weight: 600;
+}
+
+.icons img {
+    max-height: 38px;
+}
+
+.user-archetypes,
+.user-trophies {
+    border: 2px solid #FFCE34;
+    padding: 0.5rem;
+}
+
+.archetypes-single .archetype:last-child {
+    margin-bottom: 1rem;
+}
+
+.archetype-svg {
+    width: 75%;
+    height: 20px;
+    margin-bottom: 0.5rem;
+}
+
+.bold-highlight {
+    color: #FFCE34;
+}
+
+.secret-trophies .trophy {
+    min-height: 250px;
+}
+
+    .secret-trophies .trophy:nth-last-child(2), .secret-trophies .trophy:last-child {
+        min-height: auto;
+    }
+
+.trophy img {
+    width: 150px;
+}
+
+.results-divider {
+    background: linear-gradient(to right, rgba(0,0,0,0), #FFCE34, rgba(0,0,0,0));
+    height: 2px;
+    width: 75%;
+    margin: auto;
+}
+
+/* Up to md Breakpoint */
+@media screen and (max-width: 991.98px) {
+    .user-results > div:first-child {
+        padding-bottom: 1rem;
+    }
+}
+
+/* Up to sm Breakpoint */
+@media screen and (max-width: 767.98px) {
+    .button-controls {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+    .user-profile {
+        padding-bottom: 1.5rem;
+    }
+}
+
+/* Up to xs Breakpoint */
+@media screen and (max-width: 575.98px) {
+    .secret-trophies .trophy {
+        min-height: auto;
+    }
+}
