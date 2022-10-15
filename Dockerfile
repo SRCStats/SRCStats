@@ -2,7 +2,8 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
 WORKDIR /home/srcstats/site
 
-COPY *.csproj .
+COPY SRCStats.sln .
+COPY src/SRCStats.csproj ./src/
 RUN dotnet restore
 
 RUN dotnet tool install -g dotnet-ef --version 6.0.8
@@ -12,7 +13,7 @@ COPY . .
 
 ENV SRC_STATS_SQL_CONNECTION_STRING dummy
 
-RUN dotnet ef migrations add Init
+RUN dotnet ef migrations add Init --project src/SRCStats.csproj
 
 RUN dotnet publish -c Release -o /SRCStats
 
