@@ -1,13 +1,12 @@
 // js vendors
 import '@popperjs/core';
-import 'bootstrap';
-import 'twemoji';
+import twemoji from 'twemoji';
 
 // css vendors
 import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 // css
 import '../css/site.scss';
-import twemoji from 'twemoji';
 
 twemoji.parse(document.body);

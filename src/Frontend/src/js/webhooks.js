@@ -1,22 +1,29 @@
 ﻿"use strict";
 
 import { HubConnectionBuilder } from "@microsoft/signalr";
-import { Tooltip } from 'bootstrap';
-import '../css/webhooks.scss';
+import { Tooltip } from "bootstrap";
+
+window.Dropdown = $.fn.dropdown;
+import 'bootstrap-select';
 
 import $ from 'jquery';
 window.jQuery = $;
 window.$ = $;
 
+import 'bootstrap-select/dist/css/bootstrap-select.css';
+import '../css/webhooks.scss';
+
 let nodes = new Array();
 let users = new Array();
 let counter = 0;
+
+$.fn.selectpicker.Constructor.BootstrapVersion = '4';
 
 var connection = new HubConnectionBuilder().withUrl("/webhookHub").build();
 connection.serverTimeoutInMilliseconds = 120000;
 
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl))
 
 $("#enable-verification").click(function () {
     if ($(this).is(':checked')) {

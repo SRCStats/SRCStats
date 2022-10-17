@@ -55,7 +55,8 @@
     </ItemGroup>
   </Target>
   <Target Name="NpmClean" BeforeTargets="Clean">
-    <RemoveDir Directories="$(WWWRoot)dist"/>
+    <RemoveDir Directories="$(WWWRoot)css"/>
+    <RemoveDir Directories="$(WWWRoot)js"/>
     <RemoveDir Directories="$(MpaRoot)node_modules"/>
   </Target>
 

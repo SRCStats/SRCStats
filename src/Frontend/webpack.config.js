@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require('webpack')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
@@ -38,6 +39,9 @@ module.exports = {
     plugins: [
         new MiniCssExtractPlugin({
             filename: "../css/[name].css"
+        }),
+        new webpack.ProvidePlugin({
+            'window.Dropdown': ['bootstrap','Dropdown'],
         })
     ]
 };
