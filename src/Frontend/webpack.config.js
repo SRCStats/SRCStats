@@ -1,7 +1,9 @@
+const glob = require("glob")
 const path = require("path");
-const webpack = require('webpack')
+const webpack = require("webpack")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const PurgeCSSPlugin = require("purgecss-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
@@ -16,6 +18,7 @@ module.exports = {
         filename: '[name].js',
         path: path.resolve(__dirname, '..', 'wwwroot', 'js')
     },
+    mode: 'production',
     devtool: 'source-map',
     module: {
         rules: [
@@ -34,11 +37,15 @@ module.exports = {
             new CssMinimizerPlugin(),
             new TerserPlugin()
         ],
-        minimize: true
+        minimize: true,
+        usedExports: true
     },
     plugins: [
         new MiniCssExtractPlugin({
             filename: "../css/[name].css"
+        }),
+        new PurgeCSSPlugin({
+          paths: glob.sync(`${path.join(__dirname, '..', 'Views')}/**/*.cshtml`,  { nodir: true })
         }),
         new webpack.ProvidePlugin({
             'window.Dropdown': ['bootstrap','Dropdown'],
