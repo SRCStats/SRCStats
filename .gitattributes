@@ -1,2 +1,2 @@
-wwwroot/lib/ linguist-vendored
-wwwroot/js/signalr/ linguist-vendored
+src/wwwroot/lib/ linguist-vendored
+src/wwwroot/js/signalr/ linguist-vendored

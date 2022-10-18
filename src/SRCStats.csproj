@@ -1,0 +1,104 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <MpaRoot>Frontend\</MpaRoot>
+    <WWWRoot>wwwroot\</WWWRoot>
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(MpaRoot)node_modules\**</DefaultItemExcludes>
+    <Configurations>Debug;Release;Debug WSL;Release WSL</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.8" />
+    <PackageReference Include="MongoDB.Bson" Version="2.17.1" />
+    <PackageReference Include="MongoDB.Driver" Version="2.17.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="$(MpaRoot)**" />
+    <None Remove="$(MpaRoot)**" />
+    <None Include="$(MpaRoot)**" Exclude="$(MpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <Target Name="DisplayMessages">
+    <Message Text="$(Configuration)" />
+  </Target>
+  
+  <!-- Windows versions (Debug/Release) -->
+  <Target Name="NpmInstall" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(MpaRoot)node_modules') ">
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run SRCStats. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE. If installed, please make sure you selected the proper solution configuration." />
+    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+    <Exec WorkingDirectory="$(MpaRoot)" Command="npm install" />
+  </Target>
+
+  <Target Name="NpmRunBuild" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release' " DependsOnTargets="NpmInstall">
+    <Exec WorkingDirectory="$(MpaRoot)" Command="npm run build" />
+  </Target>
+
+  <Target Name="PublishRunWebpack" Condition=" '$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release' " AfterTargets="ComputeFilesToPublish">
+    <Exec WorkingDirectory="$(MpaRoot)" Command="npm install" />
+    <Exec WorkingDirectory="$(MpaRoot)" Command="npm run build" />
+
+    <ItemGroup>
+      <DistFiles Include="$(WWWRoot)dist\**" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+  <!-- End Windows versions -->
+  
+  <!-- WSL versions (Debug WSL/Release WSL) -->
+  <Target Name="NpmInstallWSL" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug WSL' And !Exists('$(MpaRoot)node_modules') ">
+    <Exec Command="wsl.exe node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run SRCStats. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE. If installed, please make sure you selected the proper solution configuration." />
+    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+    <Exec WorkingDirectory="$(MpaRoot)" Command="wsl.exe npm install" />
+  </Target>
+  
+  <Target Name="NpmRunBuildWSL" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug WSL' Or '$(Configuration)' == 'Release WSL' " DependsOnTargets="NpmInstallWSL">
+    <Exec WorkingDirectory="$(MpaRoot)" Command="wsl.exe npm run build" />
+  </Target>
+  
+  <Target Name="PublishRunWebpack" Condition=" '$(Configuration)' == 'Debug WSL' Or '$(Configuration)' == 'Release WSL' " AfterTargets="ComputeFilesToPublish">
+    <Exec WorkingDirectory="$(MpaRoot)" Command="wsl.exe npm install" />
+    <Exec WorkingDirectory="$(MpaRoot)" Command="wsl.exe npm run build" />
+
+    <ItemGroup>
+      <DistFiles Include="$(WWWRoot)dist\**" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+  <!-- End WSL versions -->
+  
+  
+  <Target Name="NpmClean" BeforeTargets="Clean">
+    <RemoveDir Directories="$(WWWRoot)css" />
+    <RemoveDir Directories="$(WWWRoot)js" />
+    <RemoveDir Directories="$(MpaRoot)node_modules" />
+  </Target>
+
+</Project>

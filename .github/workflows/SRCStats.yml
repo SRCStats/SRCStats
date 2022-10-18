@@ -39,7 +39,7 @@ jobs:
           dotnet new tool-manifest
           dotnet tool install dotnet-ef
     - name: Generate SQL scripts
-      run: dotnet ef migrations script --output ${{env.WORKING_DIRECTORY}}/sql/script.sql --idempotent --context StatsDbContext
+      run: dotnet ef migrations script --output ${{env.WORKING_DIRECTORY}}/sql/script.sql --idempotent --context StatsDbContext --project src/SRCStats.csproj
     - name: Azure SQL Deploy
       uses: Azure/sql-action@v1.3
       with:
