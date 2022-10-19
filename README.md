@@ -1,6 +1,6 @@
 # SRCStats
 
-An ASP.NET MVC website for viewing stats on [Speedrun.com](https://speedrun.com) via the [API](https://speedrun.com/api/v1) and the backend [_fedata](https://speedrun.com/_fedata).
+An ASP.NET MVC website for viewing stats on [Speedrun.com](https://speedrun.com) via the [API](https://speedrun.com/api/v1), the backend [_fedata](https://speedrun.com/_fedata), and the experimental [API v2](https://speedrun.com/api/v2) endpoints.
 
 # Notice
 
@@ -15,11 +15,9 @@ This code contains spoilers for the secret trophies achievable on the website. F
 
 Please avoid these files if you wish to not be spoiled on the trophies.
 
-Additional warning: This code isn't very good. There's a lot of unimplemented features, unstylized HTML, and general bad code. Please view at your own risk.
-
 # Setup
 
-Clone the repository and ensure you have Visual Studio Community 2022 and its `ASP.NET and web development` component installed; earlier versions of VSCommunity don't support targetting .NET Core 6.
+Clone the repository and ensure you have Visual Studio Community 2022 and its `ASP.NET and web development` component installed; earlier versions of VSCommunity don't support targetting .NET Core 6. Additionally, ensure you have [Node.js](https://nodejs.org/en/) installed. If you plan to use a Node.js install on WSL, you'll have to select the "WSL" configuration for building and publishing.
 
 Configure a new SQL instance, or use an existing one. (Developing locally is recommended to be with Microsoft SQL Server). Additionally, configure a new MongoDB instance, or use an existing one. ([Azure Cosmos DB](https://azure.microsoft.com/en-us/services/cosmos-db/) w/ MongoDB API is used in production, but any will do.)
 Run the following commands to set the environment variables:
@@ -39,7 +37,12 @@ Add-Migration Init
 Update-Database
 ```
 
-Finally, build the project through Visual Studio and you'll be good to go!
+Finally, build the project through Visual Studio on the Debug configuration and you'll be good to go!
+
+# Contributing
+If you'd like to contribute to the project, thank you! We'd really appreciate your help. A good start would be to work on any issues marked as `good first issue` on the Issues tab. Simply fork the repository, create a branch for your fix, and let us know about it so we can link it to the issue! Please don't work on any issues that already have a branch or pull request linked. If you'd like to work on an issue that isn't marked with `good first issue`, let us know first so we can discuss the specifics!
+
+If you have any issues building the site, with the site itself, or if you have a feature request, an idea to optimize API calls, or anything else, feel free to open an issue for it!
 
 # License
 This project is licensed under the [MIT](LICENSE) license.
