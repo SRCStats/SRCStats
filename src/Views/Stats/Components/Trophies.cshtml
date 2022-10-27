@@ -1,0 +1,47 @@
+﻿@using SRCStats.Models.SRC
+@model IEnumerable<Trophy>
+
+<div class="col-lg-6 col-xs-12">
+	<div class="user-trophies">
+		<h3 class="pb-3">Trophies</h3>
+		<div class="row public-trophies">
+			@{
+				var trophies = Model.Where(x => x.TrophyMeta.IsSecret == false).OrderBy(x => x.TrophyMeta.Order).ToArray();
+				@foreach (var trophy in trophies)
+				{
+					<div class="trophy col-sm-6 col-xs-12">
+						<img src=@(trophy.IsAchieved ? "/assets/trophy-unlocked.png" : "/assets/trophy-locked.png") alt=@(trophy.IsAchieved ? "Achieved" : "Unachieved")>
+						<h4 class="mt-2 mb-0">@trophy.TrophyMeta.Name</h4>
+						<p class="mb-0">@trophy.TrophyMeta.Description</p>
+						<p class="fw-normal fst-italic text-break">@trophy.TrophyMeta.Quote</p>
+					</div>
+				}
+			}
+		</div>
+		<div class="results-divider"></div>
+		<h3 class="mt-3">Secret Trophies</h3>
+		<p class="pb-3">These are secret trophies! You won't know the details for these trophies until you unlock them.</p>
+		<div class="row secret-trophies">
+			@{
+				var secrets = Model.Where(x => x.TrophyMeta.IsSecret == true).OrderBy(x => x.TrophyMeta.Order).ToArray();
+				@foreach (var trophy in secrets)
+				{
+					<div class="trophy col-sm-6 col-xs-12">
+						<img style="max-width: 128px" src=@(trophy.IsAchieved ? "/assets/trophy-unlocked.png" : "/assets/trophy-locked.png") alt=@(trophy.IsAchieved ? "Achieved" : "Unachieved")>
+						@if (trophy.IsAchieved)
+						{
+							<h4 class="mt-2 mb-0">@(trophy.IsAchieved ? trophy.TrophyMeta.Name : "???")</h4>
+							<p class="mb-0">@trophy.TrophyMeta.Description</p>
+							<p class="fw-normal fst-italic text-break mb-4">@trophy.TrophyMeta.Quote</p>
+						}
+						else
+						{
+							<h4 class="mt-2 mb-4">???</h4>
+						}
+
+					</div>
+				}
+			}
+		</div>
+	</div>
+</div>

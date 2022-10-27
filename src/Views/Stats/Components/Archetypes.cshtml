@@ -1,0 +1,58 @@
+﻿@using SRCStats.Models.SRC
+@model SRCStats.Models.User
+
+<div class="col-lg-6 col-xs-12">
+	<div class="user-archetypes">
+		<h3 class="pb-3">Archetypes</h3>
+		<div class="archetypes-single">
+			@{
+				var archetypes = Model.Archetypes.ToArray();
+				@for (int i = 0; i < Model.Archetypes.Count(); i++)
+				{
+					<div class="archetype">
+						<h4 class="m-0">@(archetypes[i].ArchetypeMeta.Name)<sup><i title="@archetypes[i].ArchetypeMeta.Description" class="bi bi-question-circle fs-6 text-primary"></i></sup></h4>
+						<p class="text-secondary m-0">@(archetypes[i].Value + "%")</p>
+						<p class="fst-italic mb-1">@(archetypes[i].OptionalParam != null ? string.Format(archetypes[i].ArchetypeMeta.MaxDesc, archetypes[i].OptionalParam) : archetypes[i].ArchetypeMeta.MaxDesc)</p>
+						<svg class="archetype-svg">
+							<line x1="0%" y1="10" x2="100%" y2="10" style="stroke:rgb(255,255,255);stroke-width:10" />
+							<line x1="0%" y1="10" x2="@(archetypes[i].Value + "%")" y2="10" style="stroke:rgb(249, 208, 64);stroke-width:10" />
+						</svg>
+					</div>
+				}
+			}
+		</div>
+		<div class="results-divider"></div>
+		<h3 class="pb-3 mt-3">Dual Archetypes</h3>
+		<div class="archetypes-dual">
+			@{
+				var archetypesDual = Model.DualArchetypes.ToArray();
+				@for (int i = 0; i < Model.DualArchetypes.Count(); i++)
+				{
+					<div class="archetype">
+						@if (archetypesDual[i].Value > 25)
+						{
+							<h4 class="m-0">@archetypesDual[i].ArchetypeMeta.MaxName<sup><i title="@archetypesDual[i].ArchetypeMeta.Description" class="bi bi-question-circle fs-6 text-primary"></i></sup></h4>
+							<p class="text-secondary m-0">@(archetypesDual[i].Value + "%")</p>
+							<p class="fst-italic mb-1">@(archetypesDual[i].OptionalParam != null ? string.Format(archetypesDual[i].ArchetypeMeta.MaxDesc, archetypesDual[i].OptionalParam) : archetypesDual[i].ArchetypeMeta.MaxDesc)</p>
+						}
+						else if (archetypesDual[i].Value < -25)
+						{
+							<h4 class="m-0">@archetypesDual[i].ArchetypeMeta.MinName<sup><i title="@archetypesDual[i].ArchetypeMeta.Description" class="bi bi-question-circle fs-6 text-primary"></i></sup></h4>
+							<p class="text-secondary m-0">@(Math.Abs((int)archetypesDual[i].Value) + "%")</p>
+							<p class="fst-italic mb-1">@(archetypesDual[i].OptionalParam != null ? string.Format(archetypesDual[i].ArchetypeMeta.MinDesc, archetypesDual[i].OptionalParam) : archetypesDual[i].ArchetypeMeta.MinDesc)</p>
+						}
+						else
+						{
+							<h4 class="m-0">@(archetypesDual[i].ArchetypeMeta.Name)<sup><i title="@archetypesDual[i].ArchetypeMeta.Description" class="bi bi-question-circle fs-6 text-primary"></i></sup></h4>
+							<p class="text-secondary mb-1">@(Math.Abs((int)archetypesDual[i].Value) + "%")</p>
+						}
+						<svg class="archetype-svg">
+							<line x1="0%" y1="10" x2="100%" y2="10" style="stroke:rgb(255,255,255);stroke-width:10" />
+							<line x1="0%" y1="10" x2="@((50 + (archetypesDual[i].Value / 2)) + "%")" y2="10" style="stroke:rgb(249, 208, 64);stroke-width:10" />
+						</svg>
+					</div>
+				}
+			}
+		</div>
+	</div>
+</div>
