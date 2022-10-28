@@ -1,8 +1,8 @@
 const glob = require('glob-all');
 const path = require("path");
 const webpack = require("webpack")
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const PurgeCSSPlugin = require("purgecss-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 
@@ -48,7 +48,8 @@ module.exports = {
             paths: glob.sync([
                 `${path.join(__dirname, '..', 'Views')}/**/*.cshtml`,
                 `${path.join(__dirname, '..', 'Views')}/**/Components/*.cshtml`
-            ])
+            ]),
+            safelist: ['list-group-item', 'list-group-item-action', 'dropdown-toggle', 'bs-placeholder', 'btn-light', /^filter-option/, 'filter-option-inner', 'filter-option-inner-inner', 'bootstrap-select', 'show-tick', 'dropdown', /^bs-select/, /^dropdown/, 'inner', 'show', 'tooltip', /^bs-tooltip/, 'fade', /^tooltip/]
         }),
         new webpack.ProvidePlugin({
             'window.Dropdown': ['bootstrap','Dropdown'],
