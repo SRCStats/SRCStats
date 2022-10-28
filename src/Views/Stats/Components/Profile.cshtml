@@ -1,0 +1,92 @@
+﻿@using System.Globalization
+
+@using SRCStats.Models.SRC
+@model SRCStats.Models.User
+
+@{
+	TextInfo ti = new CultureInfo("en-US", false).TextInfo;
+}
+
+<div class="row user-profile d-flex align-items-center justify-content-center">
+	<div class="col-md-6 col-xs-12 d-flex flex-column align-items-center justify-content-center">
+		@if (Model.Image != null)
+		{
+			<div class="user-profile-picture pb-3">
+				<img src="@Model.Image" draggable="false" alt="User Profile Picture">
+			</div>
+		}
+		<h2 class="text-center">
+			<span class="icons d-inline-block">
+				@* todo: use balloon or similar for popups on these to display the alt text *@
+				@if (Model.Icon != null)
+				{
+					<img draggable="false" src="@Model.Icon" alt="@(Model.Role != "user" ? ti.ToTitleCase(Model.Role) : null)">
+				}
+				@if (Model.SupporterIcon != null)
+				{
+					<img draggable="false" src="@Model.SupporterIcon" alt="Speedrun.com Supporter">
+				}
+			</span>
+			<span class="user-info">
+				@* todo: make this look like src's name gradient? (per letter instead of clip) *@
+				<span class="username" style="@(Model.NameStyle.Style == "gradient" ? $"background-image: linear-gradient(60deg, {Model.NameStyle.ColorFrom.Light}, {Model.NameStyle.ColorTo.Light}); color: transparent;" : $"color: {Model.NameStyle.Color.Light}")">@Model.Name </span>
+				@if (Model.Pronouns != null && Model.Pronouns.Length > 0)
+				{
+					<span class="pronouns">(@Model.Pronouns)</span>
+				}
+			</span>
+		</h2>
+		@if (Model.Location != null && Model.Location.Country != null && Model.Location.Country.Names != null)
+		{
+			<h4>@((Model.Location.Country.Code != "vh" ? string.Concat(Model.Location.Country.Code.Substring(0, 2).ToUpper().Select(x => char.ConvertFromUtf32(x + 0x1F1A5))) : "") + " " + Model.Location.Country.Names.International)</h4>
+		}
+	</div>
+	<div class="col-md-6 col-xs-12">
+		<div class="user-stats w-100">
+			<div class="row">
+				<div class="col-6">
+					<h3 class="mb-0">Runs</h3>
+				</div>
+				<div class="col-6">
+					<h3 class="mb-0">@(Model.FullGameRuns + Model.IndividualLevelRuns)</h3>
+					<p class="text-secondary mb-1">Full game: @Model.FullGameRuns</p>
+					<p class="text-secondary mb-1">Individual level: @Model.IndividualLevelRuns</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-6">
+					<h3 class="mb-0">Runs Reviewed</h3>
+				</div>
+				<div class="col-6">
+					<h3 class="mb-0">@(Model.VerifiedRuns + Model.RejectedRuns)</h3>
+					<p class="text-secondary mb-1">Full game: @Model.FullGameRuns</p>
+					<p class="text-secondary mb-1">Individual level: @Model.IndividualLevelRuns</p>
+				</div>
+			</div>
+			<div class="row" id="forum-posts">
+				<div class="col-6">
+					<h3>Forum Posts</h3>
+				</div>
+				<div class="col-6">
+					<h3>@Model.ForumPosts</h3>
+				</div>
+			</div>
+			<div class="row" id="total-run-time">
+				<div class="col-6">
+					<h3>Total Run Time</h3>
+				</div>
+				<div class="col-6">
+					<h3>@(TimeSpan.FromSeconds(Model.TotalRunTime).ToString("d'd 'h'h 'm'm 's's'"))</h3>
+				</div>
+			</div>
+			<div class="row" id="date-joined">
+				<div class="col-6">
+					<h3 class="mb-0">Date Joined</h3>
+				</div>
+				<div class="col-6">
+					<h3 class="mb-0">@(Model.SignUpDate.ToString())</h3>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

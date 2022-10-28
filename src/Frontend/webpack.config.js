@@ -1,4 +1,4 @@
-const glob = require("glob")
+const glob = require('glob-all');
 const path = require("path");
 const webpack = require("webpack")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -45,7 +45,10 @@ module.exports = {
             filename: "../css/[name].css"
         }),
         new PurgeCSSPlugin({
-          paths: glob.sync(`${path.join(__dirname, '..', 'Views')}/**/*.cshtml`,  { nodir: true })
+            paths: glob.sync([
+                `${path.join(__dirname, '..', 'Views')}/**/*.cshtml`,
+                `${path.join(__dirname, '..', 'Views')}/**/Components/*.cshtml`
+            ])
         }),
         new webpack.ProvidePlugin({
             'window.Dropdown': ['bootstrap','Dropdown'],

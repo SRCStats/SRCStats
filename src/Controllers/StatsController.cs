@@ -20,13 +20,16 @@ namespace SRCStats.Controllers
         }
 
         [HttpGet]
-        [Route("User/{Username?}")]
+        [Route("users")]
+        public IActionResult Users()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Route("users/{Username?}")]
         public IActionResult Users(string Username)
         {
-            if (Username == null)
-            {
-                return View();
-            }
             if (_cache.TryGetValue(Username, out User? user))
             {
                 Debug.WriteLine($"User {Username} found in cache.");
@@ -34,16 +37,16 @@ namespace SRCStats.Controllers
             else
             {
                 user = _db.Users.Include(x => x.Location.Country.Names).Include(x => x.NameStyle).ThenInclude(style => style.ColorTo).Include(x => x.NameStyle).ThenInclude(style => style.ColorFrom).Include(x => x.NameStyle).ThenInclude(style => style.Color).Include(x => x.Archetypes).ThenInclude(x => x.ArchetypeMeta).Include(x => x.DualArchetypes).ThenInclude(x => x.ArchetypeMeta).Include(x => x.Trophies).ThenInclude(x => x.TrophyMeta).Where(x => x.Name.Equals(Username)).FirstOrDefault();
+                var cacheOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromHours(24));
+                _cache.Set(Username, user, cacheOptions);
             }
             if (user != null)
             {
-                var cacheOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromHours(24));
-                _cache.Set(Username, user, cacheOptions);
-                // todo: make this a partial view?
-                return View(user);
+                return View("[Username]", user);
             }
             else
             {
+                // todo: implement option to start the search process from the page
                 return NotFound();
             }
         }
