@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+
 using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 using NUnit.Framework;
@@ -32,6 +32,8 @@ namespace SRCStats.Tests
             var submitButton = Page.Locator("#submit");
             await submitButton.ClickAsync();
             await Expect(Page.Locator("#prog-info")).ToHaveTextAsync(new Regex(".*"));
+            await Expect(Page.Locator("#prog-info")).ToHaveTextAsync(new Regex("^Fetching user info"));
+            await Expect(Page.Locator("#prog-info")).ToHaveTextAsync(new Regex("^Fetching user's runs"));
             await Expect(Page.Locator("#prog-info")).ToHaveTextAsync(new Regex("^Fetching user's examined runs"));
             await Expect(Page).ToHaveURLAsync(Root + "/Camcorder", new PageAssertionsToHaveURLOptions() { Timeout = 10000 });
         }
