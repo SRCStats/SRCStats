@@ -39,6 +39,17 @@ Update-Database
 
 Finally, build the project through Visual Studio on the Debug configuration and you'll be good to go!
 
+## Testing
+
+To use the testing suite in SRCStats.Tests, or to add new tests, you'll need to configure the Tests project. Navigate to the `tests/` directory and enter the following commands:
+
+```bat
+dotnet build
+powershell bin/Debug/net6.0/playwright.ps1 install
+```
+
+Finally, you'll be able to run the tests with `dotnet test`. To only run a specific test or group of tests, use NUnit's [--filter & FullyQualifiedName](https://learn.microsoft.com/en-us/dotnet/core/testing/selective-unit-tests?pivots=nunit) arguments in the `dotnet test` command.
+
 # Contributing
 If you'd like to contribute to the project, thank you! We'd really appreciate your help. A good start would be to work on any issues marked as `good first issue` on the Issues tab. Simply fork the repository, create a branch for your fix, and let us know about it so we can link it to the issue! Please don't work on any issues that already have a branch or pull request linked. If you'd like to work on an issue that isn't marked with `good first issue`, let us know first so we can discuss the specifics!
 
