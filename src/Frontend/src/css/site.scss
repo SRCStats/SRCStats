@@ -130,8 +130,11 @@ button.accept-policy {
         &:hover,
         &:focus {
             background-color: #525252;
+            color:rgba(0, 0, 0, 0);
+        }
+        &:not(.collapsed) {
+            box-shadow: 0 0 0 0.25rem !important;
             color: #F9D040;
-            border: none;
         }
         i {
             position: relative;
@@ -147,7 +150,7 @@ button.accept-policy {
             font-size: 28px;
         }
     }
-    .last-nav {
+    a:last-of-type {
         margin-right: 1rem;
     }
     /* Up to xs Breakpoint */
