@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 
+using Microsoft.Playwright;
 using Microsoft.Playwright.NUnit;
 using NUnit.Framework;
 
@@ -116,6 +117,7 @@ namespace SRCStats.Tests
                     await Expect(dropdownNav).ToBeHiddenAsync();
                     var dropdownButton = Page.Locator(".navbar-toggler");
                     await dropdownButton.ClickAsync();
+                    await Expect(dropdownWindow).ToHaveClassAsync(new Regex("show"));
                     await Expect(dropdownWindow).ToBeVisibleAsync();
                     await Expect(dropdownNav).ToBeVisibleAsync();
                     await Expect(Page.Locator(".site-nav-mobile > a:visible")).ToHaveCountAsync(3);
@@ -142,10 +144,11 @@ namespace SRCStats.Tests
                     var dropdownButton = Page.Locator(".navbar-toggler");
                     await Expect(dropdownButton).ToHaveCSSAsync("color", "rgba(0, 0, 0, 0.55)");
                     await dropdownButton.ClickAsync();
+                    var dropdownContent = Page.Locator("#navbarToggleExternalContent");
+                    await Expect(dropdownContent).ToHaveClassAsync(new Regex("show"));
                     await Expect(dropdownButton).ToHaveCSSAsync("color", "rgb(249, 208, 64)");
                     await dropdownButton.ClickAsync();
-                    /* todo: make this test pass. see issue #32
-                    await Expect(dropdownButton).ToHaveCSSAsync("color", "rgba(0, 0, 0, 0.55)"); */
+                    await Expect(dropdownButton).ToHaveCSSAsync("color", "rgba(0, 0, 0, 0)");
                 }
                 catch
                 {
@@ -162,9 +165,8 @@ namespace SRCStats.Tests
             var dropdownButton = Page.Locator(".navbar-toggler");
             await dropdownButton.ClickAsync();
             var webhookEntry = Page.Locator("#webhook-val");
-            /* todo: make this test pass. see issue #32
             await webhookEntry.ClickAsync(new LocatorClickOptions() { Timeout = 1000 });
-            await Expect(webhookEntry).ToBeFocusedAsync(new LocatorAssertionsToBeFocusedOptions() { Timeout = 1000 }); */
+            await Expect(webhookEntry).ToBeFocusedAsync(new LocatorAssertionsToBeFocusedOptions() { Timeout = 1000 });
         }
     }
 }
