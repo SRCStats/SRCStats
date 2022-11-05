@@ -2,6 +2,10 @@
     font-family: 'Montserrat', sans-serif;
 }
 
+.prog-frac {
+    width: 0%;
+}
+
 .user-fetch-fields {
     height: calc(100vh - 160px);
 }
@@ -9,10 +13,19 @@
 .button-controls {
     padding-top: 3rem;
     padding-bottom: 3rem;
+    /* Up to sm Breakpoint */
+    @media screen and (max-width: 767.98px) {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
 }
 
 .user-profile {
     padding-bottom: 5rem;
+    /* Up to sm Breakpoint */
+    @media screen and (max-width: 767.98px) {
+        padding-bottom: 1.5rem;
+    }
 }
 
 .user-profile-picture img {
@@ -58,11 +71,15 @@
 
 .secret-trophies .trophy {
     min-height: 250px;
-}
-
-    .secret-trophies .trophy:nth-last-child(2), .secret-trophies .trophy:last-child {
+    &:nth-last-child(2),
+    &:last-child {
         min-height: auto;
     }
+    /* Up to xs Breakpoint */
+    @media screen and (max-width: 575.98px) {
+        min-height: auto;
+    }
+}
 
 .trophy img {
     width: 150px;
@@ -79,23 +96,5 @@
 @media screen and (max-width: 991.98px) {
     .user-results > div:first-child {
         padding-bottom: 1rem;
-    }
-}
-
-/* Up to sm Breakpoint */
-@media screen and (max-width: 767.98px) {
-    .button-controls {
-        padding-top: 1.5rem;
-        padding-bottom: 1.5rem;
-    }
-    .user-profile {
-        padding-bottom: 1.5rem;
-    }
-}
-
-/* Up to xs Breakpoint */
-@media screen and (max-width: 575.98px) {
-    .secret-trophies .trophy {
-        min-height: auto;
     }
 }
