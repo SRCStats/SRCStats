@@ -183,6 +183,13 @@ nav a {
     }
 }
 
+/* Up to sm Breakpoint */
+@media screen and (max-width: 767.98px) {
+    #navbarToggleExternalContent {
+        width: 100%;
+    }
+}
+
 /* Up to xs Breakpoint */
 @media screen and (max-width: 575.98px) {
     .site-banner {
