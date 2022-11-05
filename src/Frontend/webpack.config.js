@@ -49,7 +49,7 @@ module.exports = {
                 `${path.join(__dirname, '..', 'Views')}/**/*.cshtml`,
                 `${path.join(__dirname, '..', 'Views')}/**/Components/*.cshtml`
             ]),
-            safelist: ['list-group-item', 'list-group-item-action', 'dropdown-toggle', 'bs-placeholder', 'btn-light', /^filter-option/, 'filter-option-inner', 'filter-option-inner-inner', 'bootstrap-select', 'show-tick', 'dropdown', /^bs-select/, /^dropdown/, 'inner', 'show', 'tooltip', /^bs-tooltip/, 'fade', /^tooltip/]
+            safelist: ['list-group-item', 'list-group-item-action', 'dropdown-toggle', 'bs-placeholder', 'btn-light', /^filter-option/, 'filter-option-inner', 'filter-option-inner-inner', 'bootstrap-select', 'show-tick', 'dropdown', /^bs-select/, /^dropdown/, 'inner', 'show', 'tooltip', /^bs-tooltip/, 'fade', /^tooltip/, 'collapsing']
         }),
         new webpack.ProvidePlugin({
             'window.Dropdown': ['bootstrap','Dropdown'],
