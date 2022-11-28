@@ -24,6 +24,7 @@ namespace SRCStats
             {
                 options.ClientTimeoutInterval = TimeSpan.FromSeconds(120);
                 options.KeepAliveInterval = TimeSpan.FromSeconds(40);
+                options.MaximumParallelInvocationsPerClient = 10;
             });
             builder.Services.AddSingleton<WebhookDbService>();
             builder.Services.AddMemoryCache();

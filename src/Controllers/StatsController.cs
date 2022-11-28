@@ -37,8 +37,11 @@ namespace SRCStats.Controllers
             else
             {
                 user = _db.Users.Include(x => x.Location.Country.Names).Include(x => x.NameStyle).ThenInclude(style => style.ColorTo).Include(x => x.NameStyle).ThenInclude(style => style.ColorFrom).Include(x => x.NameStyle).ThenInclude(style => style.Color).Include(x => x.Archetypes).ThenInclude(x => x.ArchetypeMeta).Include(x => x.DualArchetypes).ThenInclude(x => x.ArchetypeMeta).Include(x => x.Trophies).ThenInclude(x => x.TrophyMeta).Where(x => x.Name.Equals(Username)).FirstOrDefault();
-                var cacheOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromHours(24));
-                _cache.Set(Username, user, cacheOptions);
+                if (user != null)
+                {
+                    var cacheOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromHours(24));
+                    _cache.Set(Username, user, cacheOptions);
+                }
             }
             if (user != null)
             {
@@ -46,8 +49,13 @@ namespace SRCStats.Controllers
             }
             else
             {
-                // todo: implement option to start the search process from the page
-                return NotFound();
+                // should i *really* be able to instantiate a User like this this feels like bad programming.
+                // especially since we have a bunch of fields with Required decorators
+                User placeholderUser = new()
+                {
+                    Name = Username
+                };
+                return View("[Username]", placeholderUser);
             }
         }
     }

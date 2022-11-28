@@ -9,26 +9,54 @@
 
 @section Scripts
 {
-	<script src="~/js/user_page.js" defer></script>
+	@if (Model.Id == 0)
+	{
+		<script src="~/js/user_page.js" defer></script>
+	}
 	<link href="~/css/user_page.css" rel="stylesheet" />
 }
 
-<div class="container pb-3">
-	<div class="row button-controls">
-		<div class="col-12 d-flex gap-2 align-items-center justify-content-center">
-			<a class="btn btn-primary" href="~/users">
-				<i class="bi bi-skip-backward-fill"></i> Return
-			</a>
-			<form method="post" asp-action="ForceUsers">
-				<input asp-for="Name" value="@Model.Name" hidden>
-				<button type="submit" disabled="@(!(Model.LastUpdated.AddMinutes(10) < DateTime.UtcNow) && !Debugger.IsAttached)" class="btn btn-warning"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
-			</form>
+@if (Model.Id == 0)
+{
+	@* when this gets reworked feel free to use a component for cleaner code, see below for example *@
+	<div class="container-fluid p-3">
+		<h1>placeholder for @Model.Name</h1>
+		<div class="text-center">
+			<p id="prog-info" class="m-3 text-info text-center"></p>
+			@* i dont like html i dunno how to get this to be inline with prog info without being inside of the element, because it gets overwritten on receiveprogress *@
+			@* we also need a better way of this tooltip being visible (like balloon or something) *@
+			<span id="thread-spinner" hidden title="We are currently waiting for an open thread to connect to the API! Please don't reload the page, we'll get connected soon!" class="mx-1 spinner-grow spinner-grow-sm text-info" role="status"></span>
+		</div>
+		<div id="prog" class="progress">
+			<div id="prog-bar1" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-danger" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+			<div id="prog-bar2" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-warning" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+			<div id="prog-bar3" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+			<div id="prog-bar4" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-primary" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+			<div id="prog-bar5" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+			<div id="prog-bar6" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-secondary" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+			<div id="prog-bar7" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-dark" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
 		</div>
 	</div>
-	<partial name="Components/Profile" model="Model" />
-	<div class="row user-results text-center">
-		<partial name="Components/Archetypes" model="Model" />
-		<partial name="Components/Trophies" model="Model.Trophies" />
+} else
+{
+	<div class="container pb-3">
+		<div class="row button-controls">
+			<div class="col-12 d-flex gap-2 align-items-center justify-content-center">
+				<a class="btn btn-primary" href="~/users">
+					<i class="bi bi-skip-backward-fill"></i> Return
+				</a>
+				<form method="post" asp-action="ForceUsers">
+					<input asp-for="Name" value="@Model.Name" hidden>
+					<button type="submit" disabled="@(!(Model.LastUpdated.AddMinutes(10) < DateTime.UtcNow) && !Debugger.IsAttached)" class="btn btn-warning"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+				</form>
+			</div>
+		</div>
+		<partial name="Components/Profile" model="Model" />
+		<div class="row user-results text-center">
+			<partial name="Components/Archetypes" model="Model" />
+			<partial name="Components/Trophies" model="Model.Trophies" />
+		</div>
 	</div>
-</div>
+}
+
 

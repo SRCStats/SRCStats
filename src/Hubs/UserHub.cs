@@ -23,6 +23,18 @@ namespace SRCStats.Hubs
             _cache = cache;
         }
 
+        public async Task JoinGroup(string groupName)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, groupName.ToLower());
+            if (_db.InProgress.Where(x => x.Type == "user" && x.Name == groupName).Any() == false)
+            {
+                await Clients.Client(Context.ConnectionId).SendAsync("NotInProgress");
+            } else
+            {
+                await Clients.Client(Context.ConnectionId).SendAsync("AwaitingThread");
+            }
+        }
+
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         public async Task FetchUser(string userName, bool force)
         {
@@ -33,19 +45,21 @@ namespace SRCStats.Hubs
             // fetch pending runs
             // fetch game _fedatas
             APIHandler a = new();
+            // todo: move this to the search page
             if (string.IsNullOrWhiteSpace(userName))
             {
-                Clients.Client(Context.ConnectionId).SendAsync("Error", "No username was inputted!");
+                Clients.Group(userName.ToLower()).SendAsync("Error", "No username was inputted!");
                 return;
             }
+            // todo: move this to the search page
             if (_db.InProgress.Where(x => x.Type == "user" && x.Name == userName).Any())
             {
-                Clients.Client(Context.ConnectionId).SendAsync("Error", "That user is currently being fetched already! Please try searching for another user or wait for a few minutes and try again.");
+                Clients.Group(userName.ToLower()).SendAsync("Error", "That user is currently being fetched already! Please try searching for another user or wait for a few minutes and try again.");
                 return;
             }
             else
             {
-                Clients.Client(Context.ConnectionId).SendAsync("Init");
+                Clients.Group(userName.ToLower()).SendAsync("Init");
                 _db.InProgress.Add(new InProgress { Type = "user", Name = userName });
                 await _db.SaveChangesAsync();
             }
@@ -57,7 +71,7 @@ namespace SRCStats.Hubs
                 {
                     _db.RemoveRange(_db.InProgress.Where(x => x.Type == "user" && x.Name == userName));
                     await _db.SaveChangesAsync();
-                    Clients.Client(Context.ConnectionId).SendAsync("Complete", userCheck.Name);
+                    Clients.Group(userName.ToLower()).SendAsync("Complete");
                     return;
                 }
                 else
@@ -70,15 +84,15 @@ namespace SRCStats.Hubs
             var progress = new Progress<List<int>>(percent =>
             {
                 if (percent[0] == -16614)
-                    Clients.Client(Context.ConnectionId).SendAsync("AwaitingThread", percent[0]);
+                    Clients.Group(userName.ToLower()).SendAsync("AwaitingThread", percent[0]);
                 else
-                    Clients.Client(Context.ConnectionId).SendAsync("ReceiveProgress", percent[0], percent[1], 1);
+                    Clients.Group(userName.ToLower()).SendAsync("ReceiveProgress", percent[0], percent[1], 1);
             });
-            Clients.Client(Context.ConnectionId).SendAsync("ReceiveProgress", 0, 2, 1);
+            Clients.Group(userName.ToLower()).SendAsync("ReceiveProgress", 0, 2, 1);
             var _user = (await a.Main("GetUser", userName, progress: progress)).User;
             if (_user == null)
             {
-                Clients.Client(Context.ConnectionId).SendAsync("Error", "There is no user with that name on the site!");
+                Clients.Group(userName.ToLower()).SendAsync("Error", "There is no user with that name on the site!");
                 _db.RemoveRange(_db.InProgress.Where(x => x.Type == "user" && x.Name == userName));
                 await _db.SaveChangesAsync();
                 return;
@@ -96,7 +110,7 @@ namespace SRCStats.Hubs
                 Icon = _user.Assets.Icon?.Uri,
                 SupporterIcon = _user.Assets.SupporterIcon?.Uri
             };
-            Clients.Client(Context.ConnectionId).SendAsync("ReceiveProgress", 1, 2, 1);
+            Clients.Group(userName.ToLower()).SendAsync("ReceiveProgress", 1, 2, 1);
 
             var returnVal = (await a.Main("GetUserStats", user.SiteId, progress: progress)).UserStats;
             JsonNode stats = returnVal.Item1;
@@ -117,7 +131,7 @@ namespace SRCStats.Hubs
                 user.GuidesCreated = 0;
                 user.IsSupporter = false;
             }
-            Clients.Client(Context.ConnectionId).SendAsync("ReceiveProgress", 2, 2, 1);
+            Clients.Group(userName.ToLower()).SendAsync("ReceiveProgress", 2, 2, 1);
 
             progress = new Progress<List<int>>(percent =>
             {
@@ -126,9 +140,9 @@ namespace SRCStats.Hubs
                     percent[1] = stats["userStats"]["totalRuns"].GetValue<int>();
                 if (percent[0] == -16614)
                     // todo: check if we actually need percent[0] passed through, i dont think we do but im too scared to change it rn
-                    Clients.Client(Context.ConnectionId).SendAsync("AwaitingThread", percent[0]);
+                    Clients.Group(userName.ToLower()).SendAsync("AwaitingThread", percent[0]);
                 else
-                    Clients.Client(Context.ConnectionId).SendAsync("ReceiveProgress", percent[0] == 0 ? 1 : percent[0], percent[1], 2);
+                    Clients.Group(userName.ToLower()).SendAsync("ReceiveProgress", percent[0] == 0 ? 1 : percent[0], percent[1], 2);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             });
             var runs = (await a.Main("GetUserRuns", user.SiteId, progress: progress)).Runs;
@@ -193,9 +207,9 @@ namespace SRCStats.Hubs
                 if (percent[1] < _verified)
                     percent[1] = _verified;
                 if (percent[0] == -16614)
-                    Clients.Client(Context.ConnectionId).SendAsync("AwaitingThread", percent[0]);
+                    Clients.Group(userName.ToLower()).SendAsync("AwaitingThread", percent[0]);
                 else
-                    Clients.Client(Context.ConnectionId).SendAsync("ReceiveProgress", percent[0] == 0 ? 1 : percent[0], percent[1], 3);
+                    Clients.Group(userName.ToLower()).SendAsync("ReceiveProgress", percent[0] == 0 ? 1 : percent[0], percent[1], 3);
             });
             var runsVerified = (await a.Main("GetRunsVerified", user.SiteId, progress: progress)).Runs;
             foreach (var run in runsVerified)
@@ -249,9 +263,9 @@ namespace SRCStats.Hubs
                 if (modStatsArray != null && percent[1] < modStatsArray.Count)
                     percent[1] = modStatsArray.Count;
                 if (percent[0] == -16614)
-                    Clients.Client(Context.ConnectionId).SendAsync("AwaitingThread", percent[0]);
+                    Clients.Group(userName.ToLower()).SendAsync("AwaitingThread", percent[0]);
                 else
-                    Clients.Client(Context.ConnectionId).SendAsync("ReceiveProgress", percent[0] == 0 ? 1 : percent[0], percent[1], 4);
+                    Clients.Group(userName.ToLower()).SendAsync("ReceiveProgress", percent[0] == 0 ? 1 : percent[0], percent[1], 4);
             });
             var gamesModerated = (await a.Main("GetGamesModerated", user.SiteId, progress: progress)).Games;
             foreach (var game in gamesModerated)
@@ -286,9 +300,9 @@ namespace SRCStats.Hubs
             progress = new Progress<List<int>>(percent =>
             {   
                 if (percent[0] == -16614)
-                    Clients.Client(Context.ConnectionId).SendAsync("AwaitingThread", percent[0]);
+                    Clients.Group(userName.ToLower()).SendAsync("AwaitingThread", percent[0]);
                 else
-                    Clients.Client(Context.ConnectionId).SendAsync("ReceiveProgress", percent[0], percent[1], null);
+                    Clients.Group(userName.ToLower()).SendAsync("ReceiveProgress", percent[0], percent[1], null);
             });
             */
             user.Archetypes = await Archetypes.PopulateArchetypes(_db, user, (user.Runs ?? new List<Run>()).ToArray(), (user.RunsVerified ?? new List<Run>()).ToArray(), (user.ModeratedGames ?? new List<Game>()).ToArray());
@@ -296,29 +310,29 @@ namespace SRCStats.Hubs
             progress = new Progress<List<int>>(percent =>
             {
                 if (percent[0] == -16614)
-                    Clients.Client(Context.ConnectionId).SendAsync("AwaitingThread", percent[0]);
+                    Clients.Group(userName.ToLower()).SendAsync("AwaitingThread", percent[0]);
                 else
-                    Clients.Client(Context.ConnectionId).SendAsync("ReceiveProgress", percent?[0], percent?[1], percent?[2]);
+                    Clients.Group(userName.ToLower()).SendAsync("ReceiveProgress", percent?[0], percent?[1], percent?[2]);
             });
             user.DualArchetypes = await Archetypes.PopulateDualArchetypes(_db, user, (user.Runs ?? new List<Run>()).ToArray(), (user.RunsVerified ?? new List<Run>()).ToArray(), (user.ModeratedGames ?? new List<Game>()).ToArray(), progress);
 
             progress = new Progress<List<int>>(percent =>
             {
                 if (percent[0] == -16614)
-                    Clients.Client(Context.ConnectionId).SendAsync("AwaitingThread", percent[0]);
+                    Clients.Group(userName.ToLower()).SendAsync("AwaitingThread", percent[0]);
                 else
-                    Clients.Client(Context.ConnectionId).SendAsync("ReceiveProgress", percent[0], percent[1], 7);
+                    Clients.Group(userName.ToLower()).SendAsync("ReceiveProgress", percent[0], percent[1], 7);
             });
             user.Trophies = await Trophies.PopulateTrophies(_db, user, (user.Runs ?? new List<Run>()).ToArray(), (user.RunsVerified ?? new List<Run>()).ToArray(), (user.ModeratedGames ?? new List<Game>()).ToArray(), progress);
 
-            Clients.Client(Context.ConnectionId).SendAsync("Finalize");
+            Clients.Group(userName.ToLower()).SendAsync("Finalize");
 
             _db.Users.Add(user);
             _db.RemoveRange(_db.InProgress.Where(x => x.Type == "user" && x.Name == user.Name));
             await _db.SaveChangesAsync();
 
             _cache.Remove(user.Name);
-            await Clients.Client(Context.ConnectionId).SendAsync("Complete", user.Name);
+            await Clients.Group(userName.ToLower()).SendAsync("Complete");
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
     }

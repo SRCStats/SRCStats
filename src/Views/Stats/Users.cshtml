@@ -14,20 +14,5 @@
         <input id="userName" class="form-floating"/>
         <button style="min-width: 100px; min-height: 30px" type="button" id="submit" value="Fetch">Fetch</button>
     </div>
-    <div class="text-center">
-        <p id="prog-info" class="m-3 text-info text-center"></p>
-        @* i dont like html i dunno how to get this to be inline with prog info without being inside of the element, because it gets overwritten on receiveprogress *@
-        @* we also need a better way of this tooltip being visible (like balloon or something) *@
-        <span id="thread-spinner" hidden title="We are currently waiting for an open thread to connect to the API! Please don't reload the page, we'll get connected soon!" class="mx-1 spinner-grow spinner-grow-sm text-info" role="status"></span>
-    </div>
-    <div id="prog" class="progress">
-        <div id="prog-bar1" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-danger" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-        <div id="prog-bar2" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-warning" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-        <div id="prog-bar3" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-        <div id="prog-bar4" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-primary" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-        <div id="prog-bar5" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-        <div id="prog-bar6" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-secondary" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-        <div id="prog-bar7" class="progress-bar progress-bar-striped progress-bar-animated prog-frac bg-dark" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-    </div>
 </div>
 
