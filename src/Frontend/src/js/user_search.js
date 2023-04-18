@@ -68,7 +68,7 @@ connection.on("Finalize", function () {
 })
 
 connection.on("Complete", function (user) {
-    window.location.assign("/user/" + user);
+    window.location.assign("/users/" + user);
 })
 
 // todo: make this use a form

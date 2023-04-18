@@ -1,0 +1,34 @@
+﻿@using System.Diagnostics
+
+@using SRCStats.Models.SRC
+@model SRCStats.Models.User
+
+@{
+	ViewData["Title"] = $"User Stats - {Model.Name}";
+}
+
+@section Scripts
+{
+	<script src="~/js/user_page.js" defer></script>
+	<link href="~/css/user_page.css" rel="stylesheet" />
+}
+
+<div class="container pb-3">
+	<div class="row button-controls">
+		<div class="col-12 d-flex gap-2 align-items-center justify-content-center">
+			<a class="btn btn-primary" href="~/users">
+				<i class="bi bi-skip-backward-fill"></i> Return
+			</a>
+			<form method="post" asp-action="ForceUsers">
+				<input asp-for="Name" value="@Model.Name" hidden>
+				<button type="submit" disabled="@(!(Model.LastUpdated.AddMinutes(10) < DateTime.UtcNow) && !Debugger.IsAttached)" class="btn btn-warning"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+			</form>
+		</div>
+	</div>
+	<partial name="Components/Profile" model="Model" />
+	<div class="row user-results text-center">
+		<partial name="Components/Archetypes" model="Model" />
+		<partial name="Components/Trophies" model="Model.Trophies" />
+	</div>
+</div>
+

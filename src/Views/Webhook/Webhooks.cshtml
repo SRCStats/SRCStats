@@ -17,7 +17,7 @@
 			<input id="webhook-val" type="text" asp-for="WebhookUrl" class="form-control" placeholder="https://discord.com/api/webhooks/xxxxxxxxxxxxxxx/xxxxxxxxxxxxxxxx" aria-label="Webhook URL" aria-describedby="webhook-desc">
 			<button type="button" class="btn btn-success" id="submit-webhook">Submit</button>
 		</div>
-		<h2 class="m-3">Records<sup><i data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Events for when a run is verified." class="bi bi-question-circle fs-6 text-primary"></i></sup></h2>
+		<h2 class="m-3">Records<sup><i data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Events for when a run is verified." id="records-tooltip" class="bi bi-question-circle fs-6 text-primary"></i></sup></h2>
 		<div class="m-3 form-check form-switch">
 			<input class="form-check-input" type="checkbox" autocomplete=off id="enable-records" checked>
 			<label class="form-check-label" for="enable-records">Enabled</label>
@@ -53,14 +53,14 @@
 			</div>
 				
 			</div>
-		<h2 class="m-3">Verification<sup><i data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Events for when a run's verification status changes." class="bi bi-question-circle fs-6 text-primary"></i></sup></h2>
+		<h2 class="m-3">Verification<sup><i data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Events for when a run's verification status changes." id="verification-tooltip" class="bi bi-question-circle fs-6 text-primary"></i></sup></h2>
 		<div class="m-3 form-check form-switch">
 			<input class="form-check-input" type="checkbox" autocomplete=off id="enable-verification" checked>
 			<label class="form-check-label" for="enable-verification">Enabled</label>
 		</div>
 		<div class="input-group" id="verification-ig">
 			<div class="m-3">
-				<label class="input-group-text mx-1" for="context">Context<sup><i data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Game: Specific games. User: All games moderated by that user." class="bi bi-question-circle fs-7 text-primary"></i></sup></label>
+				<label class="input-group-text mx-1" for="context">Context<sup><i data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Game: Specific games. User: All games moderated by that user." id="context-tooltip" class="bi bi-question-circle fs-7 text-primary"></i></sup></label>
 				<select class="selectpicker" title="Select context...">
 					<option value="game">Game</option>
 					<option value="user">User</option>
